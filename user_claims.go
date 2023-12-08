@@ -1,6 +1,7 @@
 package easclient
 
 import (
+	"context"
 	"net/http"
 	"strings"
 )
@@ -37,4 +38,22 @@ func (claims *UserClaims) SetOnHeader(header http.Header) {
 	} else {
 		header.Set(string(HeaderTokens), "")
 	}
+}
+
+const UserClaimsKey = "easclient-user-claims-key"
+
+func (claims *UserClaims) SetOnContext(ctx context.Context) context.Context {
+	return context.WithValue(ctx, UserClaimsKey, claims)
+}
+
+func UserClaimsFromContext(ctx context.Context) *UserClaims {
+	if ctx == nil {
+		return nil
+	}
+
+	if claims, ok := ctx.Value(UserClaimsKey).(*UserClaims); ok {
+		return claims
+	}
+
+	return nil
 }
