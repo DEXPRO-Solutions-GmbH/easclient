@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"testing"
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
 	"github.com/joho/godotenv"
@@ -26,4 +27,10 @@ func init() {
 	client.SetBasicAuth(os.Getenv("EAS_USER"), os.Getenv("EAS_PASSWORD"))
 
 	DefaultClient = easclient.NewStoreClient(client)
+}
+
+func testPrelude(t *testing.T) {
+	if os.Getenv("GITHUB_ACTION") != "" {
+		t.Skip("Tests can't currently be run in the GitHub Action environment. We will first have to make it possible to run the EAS or a mocked variant in CI")
+	}
 }

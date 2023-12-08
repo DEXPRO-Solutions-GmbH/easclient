@@ -9,6 +9,8 @@ import (
 )
 
 func TestStoreClient_GetStoreStatus(t *testing.T) {
+	testPrelude(t)
+
 	ctx := context.Background()
 	user := easclient.NewUserClaims("test@dexpro.de")
 	ctx = user.SetOnContext(ctx)
