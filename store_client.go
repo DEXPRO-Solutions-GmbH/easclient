@@ -16,12 +16,16 @@ func NewStoreClient(c *resty.Client) *StoreClient {
 }
 
 func (c *StoreClient) newRequest(ctx context.Context) (*resty.Request, error) {
+	return newRequest(ctx, c.c)
+}
+
+func newRequest(ctx context.Context, c *resty.Client) (*resty.Request, error) {
 	claims := UserClaimsFromContext(ctx)
 	if claims == nil {
 		return nil, errors.New("missing user claims in context object")
 	}
 
-	req := c.c.NewRequest()
+	req := c.NewRequest()
 	req.SetContext(ctx)
 	req.SetHeader("Accept", "application/json")
 	claims.SetOnHeader(req.Header)
