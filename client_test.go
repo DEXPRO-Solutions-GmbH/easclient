@@ -11,7 +11,10 @@ import (
 	"gopkg.in/resty.v1"
 )
 
-var DefaultClient *easclient.StoreClient
+var (
+	DefaultClient       *easclient.StoreClient
+	DefaultServerClient *easclient.ServerClient
+)
 
 // init is run before any tests are executed.
 // it loads the environment variables from .env and creates
@@ -25,8 +28,12 @@ func init() {
 	client := resty.New()
 	client.SetHostURL(fmt.Sprintf("http://%s/eas/archives/%s", os.Getenv("EAS_HOST"), os.Getenv("EAS_STORE")))
 	client.SetBasicAuth(os.Getenv("EAS_USER"), os.Getenv("EAS_PASSWORD"))
-
 	DefaultClient = easclient.NewStoreClient(client)
+
+	serverClient := resty.New()
+	serverClient.SetHostURL(fmt.Sprintf("http://%s/eas/archives", os.Getenv("EAS_HOST")))
+	serverClient.SetBasicAuth(os.Getenv("EAS_USER"), os.Getenv("EAS_PASSWORD"))
+	DefaultServerClient = easclient.NewServerClient(serverClient)
 }
 
 func testPrelude(t *testing.T) {
