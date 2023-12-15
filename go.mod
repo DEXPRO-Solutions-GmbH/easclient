@@ -3,6 +3,7 @@ module github.com/DEXPRO-Solutions-GmbH/easclient
 go 1.21.4
 
 require (
+	github.com/google/uuid v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	gopkg.in/resty.v1 v1.12.0
