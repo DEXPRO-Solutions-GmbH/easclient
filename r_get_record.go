@@ -19,8 +19,23 @@ type Record struct {
 		InitialArchiverLogin   string    `json:"_initialArchiverLogin"`
 		InitialArchiveDateTime time.Time `json:"_initialArchiveDateTime"`
 	} `json:"headerFields"`
-	RecordFields map[string]string `json:"recordFields"`
-	Attachments  []any             `json:"attachments"`
+	RecordFields map[string]string   `json:"recordFields"`
+	Attachments  []*RecordAttachment `json:"attachments"`
+}
+
+type RecordAttachment struct {
+	Body            string    `json:"body"`
+	Name            string    `json:"name"`
+	Size            string    `json:"size"`
+	Register        string    `json:"register"`
+	Author          string    `json:"author"`
+	Type            string    `json:"type"`
+	DocumentType    string    `json:"documentType"`
+	Id              uuid.UUID `json:"id"`
+	FileId          uuid.UUID `json:"fileId"`
+	MasterId        uuid.UUID `json:"masterId"`
+	Version         string    `json:"version"`
+	ArchiveDateTime time.Time `json:"archiveDateTime"`
 }
 
 func (c *StoreClient) GetRecord(ctx context.Context, id uuid.UUID) (*Record, error) {
