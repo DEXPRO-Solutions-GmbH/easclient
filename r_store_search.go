@@ -3,15 +3,28 @@ package easclient
 import (
 	"context"
 	"fmt"
+	"strconv"
 )
 
 type SearchRequest struct {
 	Query string `json:"query"`
+
+	ItemsPerPage int `json:"itemsPerPage"`
+	StartIndex   int `json:"startIndex"`
+
+	// Sort is the field to sort by
+	Sort string `json:"sort"`
+	// SortOrder is the order to sort by, either "asc" or "desc"
+	SortOrder string `json:"sortOrder"`
 }
 
 func (request SearchRequest) ToQuery() map[string]string {
 	return map[string]string{
-		"query": request.Query,
+		"query":        request.Query,
+		"itemsPerPage": strconv.Itoa(request.ItemsPerPage),
+		"startIndex":   strconv.Itoa(request.StartIndex),
+		"sort":         request.Sort,
+		"sortOrder":    request.SortOrder,
 	}
 }
 
