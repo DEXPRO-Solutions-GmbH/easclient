@@ -16,6 +16,7 @@ var (
 	defaultServerOnce   sync.Once
 )
 
+// DefaultClient returns an a client based on ENV variables: EAS_HOST, EAS_STORE, EAS_USER, EAS_PASSWORD
 func DefaultClient() *easclient.StoreClient {
 	defaultClientOnce.Do(func() {
 		client := resty.New()
@@ -27,6 +28,7 @@ func DefaultClient() *easclient.StoreClient {
 	return defaultClient
 }
 
+// DefaultServerClient returns an a client based on ENV variables: EAS_HOST, EAS_USER, EAS_PASSWORD
 func DefaultServerClient() *easclient.ServerClient {
 	defaultServerOnce.Do(func() {
 		serverClient := resty.New()
