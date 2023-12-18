@@ -90,6 +90,16 @@ type SearchResponse struct {
 	Result           []*SearchResult `json:"result"`
 }
 
+// SearchQuery is similar to Search but expects a URL from which SearchRequest is parsed via SearchRequestFromURL.
+func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchResponse, error) {
+	request, err := SearchRequestFromURL(url)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse search request: %w", err)
+	}
+
+	return c.Search(ctx, request)
+}
+
 func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*SearchResponse, error) {
 	req, err := c.newRequest(ctx)
 	if err != nil {
