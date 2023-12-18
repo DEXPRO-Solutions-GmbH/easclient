@@ -1,4 +1,4 @@
-package easclient_test
+package eastest
 
 import (
 	"errors"
