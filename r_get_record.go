@@ -23,6 +23,11 @@ type Record struct {
 	Attachments  []*RecordAttachment `json:"attachments"`
 }
 
+// GetHeaderField returns either the value of the given header field or an empty string if the field does not exist.
+func (rec *Record) GetHeaderField(name string) string {
+	return rec.RecordFields[name]
+}
+
 type RecordAttachment struct {
 	Body            string    `json:"body"`
 	Name            string    `json:"name"`
