@@ -6,12 +6,15 @@ import (
 	"testing"
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/eastest"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/internal"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
 
 func TestStoreClient_GetRecordAttachment(t *testing.T) {
-	testPrelude(t)
+	internal.TestPrelude(t)
+	eastest.SkipInCI(t)
 
 	ctx := context.Background()
 	user := easclient.NewUserClaims("test@dexpro.de")
@@ -19,7 +22,7 @@ func TestStoreClient_GetRecordAttachment(t *testing.T) {
 
 	buffer := new(bytes.Buffer)
 
-	record, err := DefaultClient.GetRecordAttachment(
+	record, err := eastest.DefaultClient().GetRecordAttachment(
 		ctx,
 		buffer,
 		uuid.MustParse("a65efcf9-8c74-4b84-8106-233c1c64a07c"),

@@ -5,11 +5,14 @@ import (
 	"testing"
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/eastest"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/internal"
 	"github.com/stretchr/testify/require"
 )
 
 func TestStoreClient_PutStore(t *testing.T) {
-	testPrelude(t)
+	internal.TestPrelude(t)
+	eastest.SkipInCI(t)
 
 	ctx := context.Background()
 	user := easclient.NewUserClaims("test@dexpro.de")
@@ -17,7 +20,7 @@ func TestStoreClient_PutStore(t *testing.T) {
 
 	storeName := "random-store"
 
-	err := DefaultServerClient.PutStore(ctx, storeName, &easclient.PutStoreRequest{
+	err := eastest.DefaultServerClient().PutStore(ctx, storeName, &easclient.PutStoreRequest{
 		ConfigurationTemplate: easclient.ConfigurationTemplate{
 			Name: "default",
 			Parameters: []easclient.ConfigurationParameter{
