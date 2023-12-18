@@ -1,13 +1,11 @@
 package eastest
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"sync"
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
-	"github.com/joho/godotenv"
 	"gopkg.in/resty.v1"
 )
 
@@ -38,14 +36,4 @@ func DefaultServerClient() *easclient.ServerClient {
 	})
 
 	return defaultServerClient
-}
-
-// init is run before any tests are executed.
-// it loads the environment variables from .env and creates
-// a default client for all tests to use.
-func init() {
-	err := godotenv.Load(".env")
-	if errors.Is(err, os.ErrNotExist) {
-		return
-	}
 }

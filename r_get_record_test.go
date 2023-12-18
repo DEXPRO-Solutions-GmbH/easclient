@@ -6,11 +6,13 @@ import (
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
 	"github.com/DEXPRO-Solutions-GmbH/easclient/eastest"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/internal"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
 
 func TestStoreClient_GetRecord(t *testing.T) {
+	internal.TestPrelude(t)
 	eastest.SkipInCI(t)
 
 	ctx := context.Background()
