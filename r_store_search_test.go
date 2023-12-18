@@ -19,15 +19,33 @@ func TestStoreClient_Search(t *testing.T) {
 	user := easclient.NewUserClaims("test@dexpro.de")
 	ctx = user.SetOnContext(ctx)
 
-	request := &easclient.SearchRequest{
-		Query: "Amazo*",
-	}
+	t.Run("returns results when using only query", func(t *testing.T) {
+		request := &easclient.SearchRequest{
+			Query: "Amazo*",
+		}
 
-	response, err := eastest.DefaultClient().Search(ctx, request)
-	require.NoError(t, err)
-	require.NotNil(t, response)
+		response, err := eastest.DefaultClient().Search(ctx, request)
+		require.NoError(t, err)
+		require.NotNil(t, response)
 
-	assert.Equal(t, "Amazo*", response.Query)
-	assert.Greater(t, response.TotalHits, 0)
-	assert.Greater(t, response.EffectiveResults, 0)
+		assert.Equal(t, "Amazo*", response.Query)
+		assert.Greater(t, response.TotalHits, 0)
+		assert.Greater(t, response.EffectiveResults, 0)
+	})
+
+	t.Run("returns results when using pagination details", func(t *testing.T) {
+		request := &easclient.SearchRequest{
+			Query:        "Amazo*",
+			ItemsPerPage: 25,
+			StartIndex:   2500,
+		}
+
+		response, err := eastest.DefaultClient().Search(ctx, request)
+		require.NoError(t, err)
+		require.NotNil(t, response)
+
+		assert.Equal(t, "Amazo*", response.Query)
+		assert.Greater(t, response.TotalHits, 0)
+		assert.Greater(t, response.EffectiveResults, 0)
+	})
 }
