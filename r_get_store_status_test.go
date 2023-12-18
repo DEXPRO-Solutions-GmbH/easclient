@@ -16,7 +16,7 @@ func TestStoreClient_GetStoreStatus(t *testing.T) {
 	user := easclient.NewUserClaims("test@dexpro.de")
 	ctx = user.SetOnContext(ctx)
 
-	status, err := eastest.DefaultClient.GetStoreStatus(ctx)
+	status, err := eastest.DefaultClient().GetStoreStatus(ctx)
 	require.NoError(t, err)
 	require.NotNil(t, status)
 }

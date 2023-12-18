@@ -17,7 +17,7 @@ func TestStoreClient_GetRecord(t *testing.T) {
 	user := easclient.NewUserClaims("test@dexpro.de")
 	ctx = user.SetOnContext(ctx)
 
-	record, err := eastest.DefaultClient.GetRecord(ctx, uuid.MustParse("990ac5bf-1df5-45b8-82ca-41120621f826"))
+	record, err := eastest.DefaultClient().GetRecord(ctx, uuid.MustParse("990ac5bf-1df5-45b8-82ca-41120621f826"))
 	require.NoError(t, err)
 	require.NotNil(t, record)
 }

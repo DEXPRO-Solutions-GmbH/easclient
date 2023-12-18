@@ -18,7 +18,7 @@ func TestStoreClient_PutStore(t *testing.T) {
 
 	storeName := "random-store"
 
-	err := eastest.DefaultServerClient.PutStore(ctx, storeName, &easclient.PutStoreRequest{
+	err := eastest.DefaultServerClient().PutStore(ctx, storeName, &easclient.PutStoreRequest{
 		ConfigurationTemplate: easclient.ConfigurationTemplate{
 			Name: "default",
 			Parameters: []easclient.ConfigurationParameter{

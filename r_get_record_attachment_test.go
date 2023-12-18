@@ -20,7 +20,7 @@ func TestStoreClient_GetRecordAttachment(t *testing.T) {
 
 	buffer := new(bytes.Buffer)
 
-	record, err := eastest.DefaultClient.GetRecordAttachment(
+	record, err := eastest.DefaultClient().GetRecordAttachment(
 		ctx,
 		buffer,
 		uuid.MustParse("a65efcf9-8c74-4b84-8106-233c1c64a07c"),
