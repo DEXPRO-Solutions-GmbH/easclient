@@ -5,11 +5,12 @@ import (
 	"testing"
 
 	"github.com/DEXPRO-Solutions-GmbH/easclient"
+	"github.com/DEXPRO-Solutions-GmbH/easclient/eastest"
 	"github.com/stretchr/testify/require"
 )
 
 func TestStoreClient_PutStore(t *testing.T) {
-	testPrelude(t)
+	eastest.SkipInCI(t)
 
 	ctx := context.Background()
 	user := easclient.NewUserClaims("test@dexpro.de")
