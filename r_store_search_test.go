@@ -49,3 +49,31 @@ func TestStoreClient_Search(t *testing.T) {
 		assert.Greater(t, response.EffectiveResults, 0)
 	})
 }
+
+func TestSearchRequestFromURL(t *testing.T) {
+	assertValidRequest := func(req *easclient.SearchRequest) {
+		assert.Equal(t, "creditor:amaz*", req.Query)
+		assert.Equal(t, 25, req.ItemsPerPage)
+		assert.Equal(t, 2500, req.StartIndex)
+		assert.Equal(t, "creditor", req.Sort)
+		assert.Equal(t, "asc", req.SortOrder)
+	}
+
+	t.Run("returns proper result for full url", func(t *testing.T) {
+		u, err := easclient.SearchRequestFromURL("https://localhost/eas/archives/stores/store42/?query=creditor:amaz*&itemsPerPage=25&startIndex=2500&sort=creditor&sortOrder=asc")
+		require.NoError(t, err)
+		assertValidRequest(u)
+	})
+
+	t.Run("returns proper result for path only input", func(t *testing.T) {
+		u, err := easclient.SearchRequestFromURL("/eas/archives/stores/store42/?query=creditor:amaz*&itemsPerPage=25&startIndex=2500&sort=creditor&sortOrder=asc")
+		require.NoError(t, err)
+		assertValidRequest(u)
+	})
+
+	t.Run("returns proper result for query only input", func(t *testing.T) {
+		u, err := easclient.SearchRequestFromURL("?query=creditor:amaz*&itemsPerPage=25&startIndex=2500&sort=creditor&sortOrder=asc")
+		require.NoError(t, err)
+		assertValidRequest(u)
+	})
+}

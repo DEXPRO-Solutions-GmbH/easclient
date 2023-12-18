@@ -3,6 +3,7 @@ package easclient
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strconv"
 )
 
@@ -16,6 +17,38 @@ type SearchRequest struct {
 	Sort string `json:"sort"`
 	// SortOrder is the order to sort by, either "asc" or "desc"
 	SortOrder string `json:"sortOrder"`
+}
+
+func SearchRequestFromURL(s string) (*SearchRequest, error) {
+	ur, err := url.Parse(s)
+	if err != nil {
+		return nil, err
+	}
+
+	vals := ur.Query()
+
+	req := &SearchRequest{
+		Query:        vals.Get("query"),
+		ItemsPerPage: 0,
+		StartIndex:   0,
+		Sort:         vals.Get("sort"),
+		SortOrder:    vals.Get("sortOrder"),
+	}
+
+	if vals.Has("itemsPerPage") {
+		req.ItemsPerPage, err = strconv.Atoi(vals.Get("itemsPerPage"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	if vals.Has("startIndex") {
+		req.StartIndex, err = strconv.Atoi(vals.Get("startIndex"))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return req, nil
 }
 
 func (request SearchRequest) ToQuery() map[string]string {
@@ -55,6 +88,16 @@ type SearchResponse struct {
 	Topn             int             `json:"topn"`
 	EffectiveResults int             `json:"effectiveResults"`
 	Result           []*SearchResult `json:"result"`
+}
+
+// SearchQuery is similar to Search but expects a URL from which SearchRequest is parsed via SearchRequestFromURL.
+func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchResponse, error) {
+	request, err := SearchRequestFromURL(url)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse search request: %w", err)
+	}
+
+	return c.Search(ctx, request)
 }
 
 func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*SearchResponse, error) {
