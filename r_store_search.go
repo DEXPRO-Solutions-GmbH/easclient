@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+
+	"github.com/google/uuid"
 )
 
 type SearchRequest struct {
@@ -70,7 +72,7 @@ type Link struct {
 type SearchResult struct {
 	Title            bool         `json:"title"`
 	Score            float64      `json:"score"`
-	Id               string       `json:"id"`
+	Id               uuid.UUID    `json:"id"`
 	FileLink         Link         `json:"fileLink"`
 	ExplainLink      Link         `json:"explainLink"`
 	CheckVersionLink Link         `json:"checkVersionLink"`
