@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type PostRecordResponse struct {
 	Records []struct {
-		Id   string `json:"id"`
+		Id   uuid.UUID `json:"id"`
 		Link struct {
 			Type  string `json:"type"`
 			Title string `json:"title"`
