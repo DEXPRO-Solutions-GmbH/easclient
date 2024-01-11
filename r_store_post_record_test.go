@@ -30,7 +30,6 @@ func TestStoreClient_PostRecord(t *testing.T) {
 	require.NotNil(t, res)
 
 	require.Len(t, res.Records, 1)
-	id, err := uuid.Parse(res.Records[0].Id)
 	require.NoError(t, err)
-	require.NotEqual(t, uuid.Nil, id)
+	require.NotEqual(t, uuid.Nil, res.Records[0].Id)
 }
