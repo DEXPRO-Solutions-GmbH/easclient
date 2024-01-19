@@ -11,10 +11,10 @@ const recordTemplateStr = `<?xml version="1.0"?>
 		<field name="{{$key}}">{{$value}}</field>{{end}}{{range $key, $value := .Attachments}}
 		<attachment>
 			<name>{{$value.Name}}</name>
-			<path>{{$value.Path}}</path>
-			<size>{{$value.Size}}</size>
-			<register>{{$value.Register}}</register>
-			<author>{{$value.Author}}</author>
+			<path>{{$value.Path}}</path>{{if $value.Size}}
+			<size>{{$value.Size}}</size>{{end}}{{if $value.Register}}
+			<register>{{$value.Register}}</register>{{end}}{{if $value.Author}}
+			<author>{{$value.Author}}</author>{{end}}
 		</attachment>{{end}}
     </record>
 </records>
@@ -37,6 +37,8 @@ type RecordRequest struct {
 
 // RecordRequestAttachment is used in a RecordRequest to specify
 // spooled attachments to be added to the record.
+//
+// The EAS expects at least Name and Path to be set.
 type RecordRequestAttachment struct {
 	Name     string
 	Path     string
