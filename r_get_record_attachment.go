@@ -30,8 +30,8 @@ func (c *StoreClient) GetRecordAttachment(ctx context.Context, writer io.Writer,
 	resBody := res.RawBody()
 	defer resBody.Close()
 
-	if status := res.StatusCode(); status != 200 {
-		return 0, fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return 0, err
 	}
 
 	n, err := io.Copy(writer, resBody)

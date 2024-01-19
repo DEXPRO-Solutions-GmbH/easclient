@@ -118,8 +118,8 @@ func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*Sear
 		return nil, err
 	}
 
-	if status := res.StatusCode(); status != 200 {
-		return nil, fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return nil, err
 	}
 
 	return &result, nil

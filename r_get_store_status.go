@@ -2,7 +2,6 @@ package easclient
 
 import (
 	"context"
-	"fmt"
 	"time"
 )
 
@@ -64,8 +63,8 @@ func (c *StoreClient) GetStoreStatus(ctx context.Context) (*StoreStatus, error) 
 		return nil, err
 	}
 
-	if status := res.StatusCode(); status != 200 {
-		return nil, fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return nil, err
 	}
 
 	return result.Status, nil
