@@ -2,7 +2,6 @@ package easclient
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -37,8 +36,8 @@ func (c *StoreClient) GetRecord(ctx context.Context, id uuid.UUID) (*Record, err
 		return nil, err
 	}
 
-	if status := res.StatusCode(); status != 200 {
-		return nil, fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return nil, err
 	}
 
 	return &result, nil

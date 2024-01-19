@@ -2,8 +2,6 @@ package easclient
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/google/uuid"
@@ -41,8 +39,8 @@ func (c *StoreClient) PostRecord(ctx context.Context, request *RecordRequest) (*
 		return nil, err
 	}
 
-	if status := res.StatusCode(); status != http.StatusOK {
-		return nil, fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return nil, err
 	}
 
 	return &result, nil

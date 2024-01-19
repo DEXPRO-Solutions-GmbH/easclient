@@ -2,7 +2,6 @@ package easclient
 
 import (
 	"context"
-	"fmt"
 )
 
 type ConfigurationParameter struct {
@@ -32,8 +31,8 @@ func (c *ServerClient) PutStore(ctx context.Context, storeName string, request *
 		return err
 	}
 
-	if status := res.StatusCode(); status != 201 {
-		return fmt.Errorf("unexpected response status %v", status)
+	if _, err := isErrorResponse(res); err != nil {
+		return err
 	}
 
 	return nil
