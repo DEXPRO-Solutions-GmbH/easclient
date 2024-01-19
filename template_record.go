@@ -20,14 +20,14 @@ const recordTemplateStr = `<?xml version="1.0"?>
 </records>
 `
 
-var recordTempalte *template.Template
+var recordTemplate *template.Template
 
 func init() {
 	t, err := template.New("putRecord").Parse(recordTemplateStr)
 	if err != nil {
 		panic(err)
 	}
-	recordTempalte = t
+	recordTemplate = t
 }
 
 type RecordRequest struct {
@@ -47,7 +47,7 @@ type RecordRequestAttachment struct {
 
 func renderRecordTemplate(request *RecordRequest) (string, error) {
 	buf := new(bytes.Buffer)
-	err := recordTempalte.Execute(buf, request)
+	err := recordTemplate.Execute(buf, request)
 	if err != nil {
 		return "", err
 	}
