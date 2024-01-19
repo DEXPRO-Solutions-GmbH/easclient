@@ -24,7 +24,18 @@ func init() {
 }
 
 type RecordRequest struct {
-	Fields map[string]string
+	Fields      map[string]string
+	Attachments []*RecordRequestAttachment
+}
+
+// RecordRequestAttachment is used in a RecordRequest to specify
+// spooled attachments to be added to the record.
+type RecordRequestAttachment struct {
+	Name     string
+	Path     string
+	Size     uint64
+	Register string
+	Author   string
 }
 
 func renderRecordTemplate(request *RecordRequest) (string, error) {
