@@ -8,7 +8,14 @@ import (
 const recordTemplateStr = `<?xml version="1.0"?>
 <records xmlns="http://namespace.otris.de/2010/09/archive/recordExtern">
     <record>{{range $key, $value := .Fields}}
-		<field name="{{$key}}">{{$value}}</field>{{end}}
+		<field name="{{$key}}">{{$value}}</field>{{end}}{{range $key, $value := .Attachments}}
+		<attachment>
+			<name>{{$value.Name}}</name>
+			<path>{{$value.Path}}</path>
+			<size>{{$value.Size}}</size>
+			<register>{{$value.Register}}</register>
+			<author>{{$value.Author}}</author>
+		</attachment>{{end}}
     </record>
 </records>
 `
