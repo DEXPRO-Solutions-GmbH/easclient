@@ -70,7 +70,7 @@ type Link struct {
 }
 
 type SearchResult struct {
-	Title            bool         `json:"title"`
+	Title            string       `json:"title"`
 	Score            float64      `json:"score"`
 	Id               uuid.UUID    `json:"id"`
 	FileLink         Link         `json:"fileLink"`
