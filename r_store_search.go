@@ -70,7 +70,8 @@ type Link struct {
 }
 
 type SearchResult struct {
-	Title            string       `json:"title"`
+	// TODO: Re-add this field once we can confirm this is either always string or bool.
+	// Title            string       `json:"title"`
 	Score            float64      `json:"score"`
 	Id               uuid.UUID    `json:"id"`
 	FileLink         Link         `json:"fileLink"`
