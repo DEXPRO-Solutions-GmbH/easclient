@@ -31,6 +31,7 @@ func TestStoreClient_Search(t *testing.T) {
 		// assert search result in general
 		assert.Equal(t, "Amazo*", response.Query.SearchTerms)
 		assert.Greater(t, response.TotalResults, 0)
+		assert.Greater(t, response.ItemsPerPage, 0)
 		assert.Greater(t, response.EffectiveResults, 0)
 
 		// assert single hit
@@ -55,6 +56,7 @@ func TestStoreClient_Search(t *testing.T) {
 		// assert search result in general
 		assert.Equal(t, "Amazo*", response.Query.SearchTerms)
 		assert.Greater(t, response.TotalResults, 0)
+		assert.Greater(t, response.ItemsPerPage, 0)
 		assert.Greater(t, response.EffectiveResults, 0)
 
 		// assert single hit
