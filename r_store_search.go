@@ -80,7 +80,7 @@ type SearchResult struct {
 	HistoryLink      Link         `json:"historyLink"`
 	VerifyLink       Link         `json:"verifyLink"`
 	HeaderFields     HeaderFields `json:"headerFields"`
-	RecordFields     RecordFields `json:"recordFields"`
+	// RecordFields     RecordFields `json:"recordFields"` // TODO: Re-add when refactoring search to XML
 }
 
 type SearchResponse struct {
