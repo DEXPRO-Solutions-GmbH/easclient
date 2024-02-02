@@ -19,7 +19,7 @@ type PostRecordResponse struct {
 }
 
 func (c *StoreClient) PostRecord(ctx context.Context, request *RecordRequest) (*PostRecordResponse, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestJSON(ctx)
 	if err != nil {
 		return nil, err
 	}

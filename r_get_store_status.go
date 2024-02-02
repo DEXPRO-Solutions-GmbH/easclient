@@ -46,7 +46,7 @@ type StoreStatus struct {
 }
 
 func (c *StoreClient) GetStoreStatus(ctx context.Context) (*StoreStatus, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestJSON(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -19,7 +19,7 @@ type PutStoreRequest struct {
 }
 
 func (c *ServerClient) PutStore(ctx context.Context, storeName string, request *PutStoreRequest) error {
-	req, err := newRequest(ctx, c.c)
+	req, err := newRequestJSON(ctx, c.c)
 	if err != nil {
 		return err
 	}

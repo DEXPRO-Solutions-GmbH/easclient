@@ -104,7 +104,7 @@ func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchRespo
 }
 
 func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*SearchResponse, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestJSON(ctx)
 	if err != nil {
 		return nil, err
 	}

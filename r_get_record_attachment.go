@@ -12,7 +12,7 @@ import (
 //
 // This returns the number of bytes written and an error if any.
 func (c *StoreClient) GetRecordAttachment(ctx context.Context, writer io.Writer, recordID, attachmentID uuid.UUID) (int64, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestJSON(ctx)
 	if err != nil {
 		return 0, err
 	}
