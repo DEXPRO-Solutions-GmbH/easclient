@@ -6,22 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type HeaderFields struct {
-	DocumentType           string    `json:"_documentType"`
-	MasterId               uuid.UUID `json:"_masterId"`
-	ArchiveDateTime        time.Time `json:"_archiveDateTime"`
-	Id                     uuid.UUID `json:"_id"`
-	Version                string    `json:"_version"`
-	ArchiverLogin          string    `json:"_archiverLogin"`
-	InitialArchiverLogin   string    `json:"_initialArchiverLogin"`
-	InitialArchiveDateTime time.Time `json:"_initialArchiveDateTime"`
-}
-
-type RecordField struct {
-	Name  string `xml:"name,attr"`
-	Value string `xml:",chardata"`
-}
-
 type Record struct {
 	DocumentType           string              `xml:"documentType"`
 	MasterId               uuid.UUID           `xml:"masterId"`
@@ -35,6 +19,11 @@ type Record struct {
 	InitialArchiveDateTime time.Time           `xml:"initialArchiveDateTime"`
 	Fields                 []*RecordField      `xml:"field"`
 	Attachments            []*RecordAttachment `xml:"attachment"`
+}
+
+type RecordField struct {
+	Name  string `xml:"name,attr"`
+	Value string `xml:",chardata"`
 }
 
 type RecordAttachment struct {
