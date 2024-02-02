@@ -8,7 +8,5 @@ type ServerClient struct {
 
 // NewServerClient creates a new client for server interaction.
 func NewServerClient(c *resty.Client) *ServerClient {
-	c = copyRestyClient(c)
-	adaptRestyClient(c)
 	return &ServerClient{c: c}
 }
