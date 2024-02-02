@@ -1,6 +1,7 @@
 package easclient
 
 import (
+	"encoding/xml"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,15 +18,31 @@ type HeaderFields struct {
 	InitialArchiveDateTime time.Time `json:"_initialArchiveDateTime"`
 }
 
-type RecordFields map[string]string
-
-type Record struct {
-	HeaderFields HeaderFields        `json:"headerFields"`
-	RecordFields RecordFields        `json:"recordFields"`
-	Attachments  []*RecordAttachment `json:"attachments"`
+type RecordField struct {
+	Name  string `xml:"name,attr"`
+	Value string `xml:",chardata"`
 }
 
-// GetHeaderField returns either the value of the given header field or an empty string if the field does not exist.
-func (rec *Record) GetHeaderField(name string) string {
-	return rec.RecordFields[name]
+type Record struct {
+	XMLName xml.Name `xml:"records"`
+	Record  struct {
+		DocumentType           string         `xml:"documentType"`
+		MasterId               uuid.UUID      `xml:"masterId"`
+		ArchiveDateTime        time.Time      `xml:"archiveDateTime"`
+		ID                     uuid.UUID      `xml:"id"`
+		Version                string         `xml:"version"`
+		ArchiverLogin          string         `xml:"archiverLogin"`
+		Archiver               string         `xml:"archiver"`
+		InitialArchiver        string         `xml:"initialArchiver"`
+		InitialArchiverLogin   string         `xml:"initialArchiverLogin"`
+		InitialArchiveDateTime time.Time      `xml:"initialArchiveDateTime"`
+		Field                  []*RecordField `xml:"field"`
+		Attachment             struct {
+			Name     string `xml:"name"`
+			Size     string `xml:"size"`
+			Register string `xml:"register"`
+			Author   string `xml:"author"`
+			ID       string `xml:"id"`
+		} `xml:"attachment"`
+	} `xml:"record"`
 }

@@ -28,25 +28,41 @@ func TestStoreClient_Search(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, response)
 
-		assert.Equal(t, "Amazo*", response.Query)
-		assert.Greater(t, response.TotalHits, 0)
+		// assert search result in general
+		assert.Equal(t, "Amazo*", response.Query.SearchTerms)
+		assert.Greater(t, response.TotalResults, 0)
 		assert.Greater(t, response.EffectiveResults, 0)
+
+		// assert single hit
+		hit := response.Items[0]
+		require.NotNil(t, hit)
+		require.Greater(t, len(hit.Fields), 0)
+		require.Equal(t, "creditor", hit.Fields[0].Name)
+		require.Equal(t, "Amazon", hit.Fields[0].Value)
 	})
 
 	t.Run("returns results when using pagination details", func(t *testing.T) {
 		request := &easclient.SearchRequest{
 			Query:        "Amazo*",
 			ItemsPerPage: 25,
-			StartIndex:   2500,
+			StartIndex:   1, // this requires at least 2 records to be present
 		}
 
 		response, err := eastest.DefaultClient().Search(ctx, request)
 		require.NoError(t, err)
 		require.NotNil(t, response)
 
-		assert.Equal(t, "Amazo*", response.Query)
-		assert.Greater(t, response.TotalHits, 0)
+		// assert search result in general
+		assert.Equal(t, "Amazo*", response.Query.SearchTerms)
+		assert.Greater(t, response.TotalResults, 0)
 		assert.Greater(t, response.EffectiveResults, 0)
+
+		// assert single hit
+		hit := response.Items[0]
+		require.NotNil(t, hit)
+		require.Greater(t, len(hit.Fields), 0)
+		require.Equal(t, "creditor", hit.Fields[0].Name)
+		require.Equal(t, "Amazon", hit.Fields[0].Value)
 	})
 }
 

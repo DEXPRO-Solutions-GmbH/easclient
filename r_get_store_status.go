@@ -2,60 +2,35 @@ package easclient
 
 import (
 	"context"
-	"time"
+	"encoding/xml"
 )
 
 type StoreStatus struct {
+	XMLName  xml.Name `xml:"status"`
 	Registry struct {
-		AllRecords         int `json:"allRecords"`
-		IndexedRecords     int `json:"indexedRecords"`
-		AllAttachments     int `json:"allAttachments"`
-		IndexedAttachments int `json:"indexedAttachments"`
-	} `json:"registry"`
+		Records struct {
+			All     int `xml:"all"`
+			Indexed int `xml:"indexed"`
+		} `xml:"records"`
+		Attachments struct {
+			All     int `xml:"all"`
+			Indexed int `xml:"indexed"`
+		} `xml:"attachments"`
+	} `xml:"registry"`
 	Index struct {
-		Documents    int  `json:"documents"`
-		IsCurrent    bool `json:"isCurrent"`
-		HasDeletions bool `json:"hasDeletions"`
-		Records      int  `json:"records"`
-		Attachments  int  `json:"attachments"`
-	} `json:"index"`
-	Capacity struct {
-		Maximum     int64     `json:"maximum"`
-		Utilized    float64   `json:"utilized"`
-		GrowthRate  float64   `json:"growthRate"`
-		ExpectedEnd time.Time `json:"expectedEnd"`
-		Lifetime    int       `json:"lifetime"`
-	} `json:"capacity"`
-	Periods []struct {
-		Start    string `json:"start"`
-		End      string `json:"end"`
-		Registry struct {
-			AllRecords         int `json:"allRecords"`
-			IndexedRecords     int `json:"indexedRecords"`
-			AllAttachments     int `json:"allAttachments"`
-			IndexedAttachments int `json:"indexedAttachments"`
-		} `json:"registry"`
-		Index struct {
-			Records     int `json:"records"`
-			Attachments int `json:"attachments"`
-		} `json:"index"`
-		Capacity struct {
-			Utilized float64 `json:"utilized"`
-		} `json:"capacity"`
-	} `json:"periods"`
+		Documents    int  `xml:"documents"`
+		IsCurrent    bool `xml:"isCurrent"`
+		HasDeletions bool `xml:"hasDeletions"`
+	} `xml:"index"`
 }
 
 func (c *StoreClient) GetStoreStatus(ctx context.Context) (*StoreStatus, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestXML(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	type Res struct {
-		Status *StoreStatus `json:"status"`
-	}
-
-	var result Res
+	var result StoreStatus
 
 	req.SetResult(&result)
 	res, err := req.Get("/status")
@@ -67,5 +42,5 @@ func (c *StoreClient) GetStoreStatus(ctx context.Context) (*StoreStatus, error) 
 		return nil, err
 	}
 
-	return result.Status, nil
+	return &result, nil
 }

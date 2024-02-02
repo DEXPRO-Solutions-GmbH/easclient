@@ -2,9 +2,11 @@ package easclient
 
 import (
 	"context"
+	"encoding/xml"
 	"fmt"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -54,47 +56,78 @@ func SearchRequestFromURL(s string) (*SearchRequest, error) {
 }
 
 func (request SearchRequest) ToQuery() map[string]string {
-	return map[string]string{
+	q := map[string]string{
 		"query":        request.Query,
 		"itemsPerPage": strconv.Itoa(request.ItemsPerPage),
 		"startIndex":   strconv.Itoa(request.StartIndex),
 		"sort":         request.Sort,
 		"sortOrder":    request.SortOrder,
 	}
+
+	// delete zero values which would result in an invalid request
+	if q["itemsPerPage"] == "0" {
+		delete(q, "itemsPerPage")
+	}
+	if q["startIndex"] == "0" {
+		delete(q, "startIndex")
+	}
+
+	return q
 }
 
 type Link struct {
-	Type  string `json:"type"`
-	Title string `json:"title"`
-	Href  string `json:"href"`
-}
-
-type SearchResult struct {
-	// TODO: Re-add this field once we can confirm this is either always string or bool.
-	// Title            string       `json:"title"`
-	Score            float64      `json:"score"`
-	Id               uuid.UUID    `json:"id"`
-	FileLink         Link         `json:"fileLink"`
-	ExplainLink      Link         `json:"explainLink"`
-	CheckVersionLink Link         `json:"checkVersionLink"`
-	HistoryLink      Link         `json:"historyLink"`
-	VerifyLink       Link         `json:"verifyLink"`
-	HeaderFields     HeaderFields `json:"headerFields"`
-	RecordFields     RecordFields `json:"recordFields"`
+	Type string `xml:"type,attr"`
+	Href string `xml:"href,attr"`
 }
 
 type SearchResponse struct {
-	Query            string          `json:"query"`
-	TotalHits        int             `json:"totalHits"`
-	ItemsPerPage     int             `json:"itemsPerPage"`
-	StartIndex       int             `json:"startIndex"`
-	Topn             int             `json:"topn"`
-	EffectiveResults int             `json:"effectiveResults"`
-	Result           []*SearchResult `json:"result"`
+	XMLName xml.Name               `xml:"rss"`
+	Version string                 `xml:"version,attr"`
+	Channel *SearchResponseChannel `xml:"channel"`
+}
+
+type SearchResponseChannel struct {
+	Title        string `xml:"title"`
+	Link         string `xml:"link"`
+	Description  string `xml:"description"`
+	TotalResults int    `xml:"totalResults"` // TODO: Assert in unmarshal test
+	ItemsPerPage int    `xml:"itemsPerPage"` // TODO: Assert in unmarshal test
+	StartIndex   int    `xml:"startIndex"`   // TODO: Assert in unmarshal test
+	Query        struct {
+		Role        string `xml:"role,attr"`
+		SearchTerms string `xml:"searchTerms,attr"`
+		StartPage   int    `xml:"startPage,attr"`
+	} `xml:"Query"`
+	Topn             int                   `xml:"topn"`
+	EffectiveResults int                   `xml:"effectiveResults"`
+	NextPage         string                `xml:"nextPage"`
+	Items            []*SearchResponseItem `xml:"item"`
+}
+
+type SearchResponseItem struct {
+	Title                  string         `xml:"title"`
+	Link                   string         `xml:"link"`
+	Description            string         `xml:"description"`
+	Score                  float64        `xml:"score"`
+	ExplainLink            Link           `xml:"explainLink"`
+	VersionLink            Link           `xml:"versionLink"`
+	HistoryLink            Link           `xml:"historyLink"`
+	VerifyLink             Link           `xml:"verifyLink"`
+	DocumentType           string         `xml:"documentType"`
+	Fields                 []*RecordField `xml:"field"` // TODO: Assert and check in get attachment response if this is the correct way to handle recurring fields
+	MasterId               uuid.UUID      `xml:"masterId"`
+	ArchiveDateTime        time.Time      `xml:"archiveDateTime"`
+	ID                     uuid.UUID      `xml:"id"`
+	Version                string         `xml:"version"`
+	ArchiverLogin          string         `xml:"archiverLogin"`
+	Archiver               string         `xml:"archiver"`
+	InitialArchiver        string         `xml:"initialArchiver"`
+	InitialArchiverLogin   string         `xml:"initialArchiverLogin"`
+	InitialArchiveDateTime time.Time      `xml:"initialArchiveDateTime"`
 }
 
 // SearchQuery is similar to Search but expects a URL from which SearchRequest is parsed via SearchRequestFromURL.
-func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchResponse, error) {
+func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchResponseChannel, error) {
 	request, err := SearchRequestFromURL(url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse search request: %w", err)
@@ -103,8 +136,8 @@ func (c *StoreClient) SearchQuery(ctx context.Context, url string) (*SearchRespo
 	return c.Search(ctx, request)
 }
 
-func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*SearchResponse, error) {
-	req, err := c.newRequest(ctx)
+func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*SearchResponseChannel, error) {
+	req, err := c.newRequestXML(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -123,5 +156,5 @@ func (c *StoreClient) Search(ctx context.Context, request *SearchRequest) (*Sear
 		return nil, err
 	}
 
-	return &result, nil
+	return result.Channel, nil
 }

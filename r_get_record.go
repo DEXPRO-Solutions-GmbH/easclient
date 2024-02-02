@@ -23,7 +23,7 @@ type RecordAttachment struct {
 }
 
 func (c *StoreClient) GetRecord(ctx context.Context, id uuid.UUID) (*Record, error) {
-	req, err := c.newRequest(ctx)
+	req, err := c.newRequestXML(ctx)
 	if err != nil {
 		return nil, err
 	}
