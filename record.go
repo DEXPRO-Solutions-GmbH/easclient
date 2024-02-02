@@ -21,6 +21,15 @@ type Record struct {
 	Attachments            []*RecordAttachment `xml:"attachment"`
 }
 
+func (r *Record) GetHeaderFieldVal(name string) string {
+	for _, field := range r.Fields {
+		if field.Name == name {
+			return field.Value
+		}
+	}
+	return ""
+}
+
 type RecordField struct {
 	Name  string `xml:"name,attr"`
 	Value string `xml:",chardata"`
