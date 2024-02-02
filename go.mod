@@ -4,7 +4,7 @@ go 1.21.4
 
 require (
 	github.com/go-json-experiment/json v0.0.0-20231102232822-2e55bd4e08b0
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.4
 	gopkg.in/resty.v1 v1.12.0
