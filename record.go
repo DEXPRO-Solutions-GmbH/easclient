@@ -36,7 +36,7 @@ type Record struct {
 	Fields                 []*RecordField `xml:"field"`
 	Attachment             struct {
 		Name     string `xml:"name"`
-		Size     string `xml:"size"`
+		Size     int    `xml:"size"`
 		Register string `xml:"register"`
 		Author   string `xml:"author"`
 		ID       string `xml:"id"`
