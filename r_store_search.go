@@ -90,9 +90,9 @@ type SearchResponseChannel struct {
 	Title        string `xml:"title"`
 	Link         string `xml:"link"`
 	Description  string `xml:"description"`
-	TotalResults int    `xml:"totalResults"` // TODO: Assert in unmarshal test
-	ItemsPerPage int    `xml:"itemsPerPage"` // TODO: Assert in unmarshal test
-	StartIndex   int    `xml:"startIndex"`   // TODO: Assert in unmarshal test
+	TotalResults int    `xml:"totalResults"`
+	ItemsPerPage int    `xml:"itemsPerPage"`
+	StartIndex   int    `xml:"startIndex"`
 	Query        struct {
 		Role        string `xml:"role,attr"`
 		SearchTerms string `xml:"searchTerms,attr"`
@@ -114,10 +114,10 @@ type SearchResponseItem struct {
 	HistoryLink            Link           `xml:"historyLink"`
 	VerifyLink             Link           `xml:"verifyLink"`
 	DocumentType           string         `xml:"documentType"`
-	Fields                 []*RecordField `xml:"field"` // TODO: Assert and check in get attachment response if this is the correct way to handle recurring fields
+	Fields                 []*RecordField `xml:"field"`
 	MasterId               uuid.UUID      `xml:"masterId"`
 	ArchiveDateTime        time.Time      `xml:"archiveDateTime"`
-	ID                     uuid.UUID      `xml:"id"`
+	Id                     uuid.UUID      `xml:"id"`
 	Version                string         `xml:"version"`
 	ArchiverLogin          string         `xml:"archiverLogin"`
 	Archiver               string         `xml:"archiver"`
