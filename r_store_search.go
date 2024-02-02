@@ -54,13 +54,23 @@ func SearchRequestFromURL(s string) (*SearchRequest, error) {
 }
 
 func (request SearchRequest) ToQuery() map[string]string {
-	return map[string]string{
+	q := map[string]string{
 		"query":        request.Query,
 		"itemsPerPage": strconv.Itoa(request.ItemsPerPage),
 		"startIndex":   strconv.Itoa(request.StartIndex),
 		"sort":         request.Sort,
 		"sortOrder":    request.SortOrder,
 	}
+
+	// delete zero values which would result in an invalid request
+	if q["itemsPerPage"] == "0" {
+		delete(q, "itemsPerPage")
+	}
+	if q["startIndex"] == "0" {
+		delete(q, "startIndex")
+	}
+
+	return q
 }
 
 type Link struct {
