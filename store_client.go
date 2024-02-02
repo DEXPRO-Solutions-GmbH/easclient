@@ -11,7 +11,10 @@ type StoreClient struct {
 	c *resty.Client
 }
 
+// NewStoreClient creates a new client for store interaction.
 func NewStoreClient(c *resty.Client) *StoreClient {
+	c = copyRestyClient(c)
+	adaptRestyClient(c)
 	return &StoreClient{c: c}
 }
 
