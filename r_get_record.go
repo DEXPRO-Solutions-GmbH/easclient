@@ -2,6 +2,7 @@ package easclient
 
 import (
 	"context"
+	"encoding/xml"
 	"time"
 
 	"github.com/google/uuid"
@@ -28,7 +29,12 @@ func (c *StoreClient) GetRecord(ctx context.Context, id uuid.UUID) (*Record, err
 		return nil, err
 	}
 
-	var result Record
+	type RecordResponse struct {
+		XMLName xml.Name `xml:"records"`
+		Record  *Record  `xml:"record"`
+	}
+
+	var result RecordResponse
 
 	req.SetResult(&result)
 	res, err := req.Get("/record/" + id.String())
@@ -40,5 +46,5 @@ func (c *StoreClient) GetRecord(ctx context.Context, id uuid.UUID) (*Record, err
 		return nil, err
 	}
 
-	return &result, nil
+	return result.Record, nil
 }
