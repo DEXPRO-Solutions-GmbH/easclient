@@ -2,24 +2,23 @@ package easclient
 
 import (
 	"context"
+	"encoding/xml"
 	"strings"
 
 	"github.com/google/uuid"
 )
 
 type PostRecordResponse struct {
-	Records []struct {
-		Id   uuid.UUID `json:"id"`
-		Link struct {
-			Type  string `json:"type"`
-			Title string `json:"title"`
-			Href  string `json:"href"`
-		} `json:"link"`
-	} `json:"records"`
+	XMLName xml.Name `xml:"recordArchive"`
+	ID      struct {
+		Value uuid.UUID `xml:",chardata"`
+		Type  string    `xml:"type,attr"`
+		Href  string    `xml:"href,attr"`
+	} `xml:"id"`
 }
 
 func (c *StoreClient) PostRecord(ctx context.Context, request *RecordRequest) (*PostRecordResponse, error) {
-	req, err := c.newRequestJSON(ctx)
+	req, err := c.newRequestXML(ctx)
 	if err != nil {
 		return nil, err
 	}

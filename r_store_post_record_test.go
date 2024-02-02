@@ -28,8 +28,5 @@ func TestStoreClient_PostRecord(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotNil(t, res)
-
-	require.Len(t, res.Records, 1)
-	require.NoError(t, err)
-	require.NotEqual(t, uuid.Nil, res.Records[0].Id)
+	require.NotEqual(t, uuid.Nil, res.ID.Value)
 }
