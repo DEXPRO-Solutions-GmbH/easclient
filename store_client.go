@@ -42,7 +42,9 @@ func newRequest(ctx context.Context, c *resty.Client, contentType string) (*rest
 
 	req := c.NewRequest()
 	req.SetContext(ctx)
-	req.SetHeader("Accept", contentType)
+	if contentType != "" {
+		req.SetHeader("Accept", contentType)
+	}
 	claims.SetOnHeader(req.Header)
 
 	return req, nil
