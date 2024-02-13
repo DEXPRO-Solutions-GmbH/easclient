@@ -7,6 +7,8 @@ import (
 )
 
 type Record struct {
+	Type                   string              `xml:"type"`
+	Title                  string              `xml:"title"`
 	DocumentType           string              `xml:"documentType"`
 	MasterId               uuid.UUID           `xml:"masterId"`
 	ArchiveDateTime        time.Time           `xml:"archiveDateTime"`
