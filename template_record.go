@@ -8,6 +8,9 @@ import (
 const recordTemplateStr = `<?xml version="1.0"?>
 <records xmlns="http://namespace.otris.de/2010/09/archive/recordExtern">
     <record>
+		{{- if .Title}}
+		<title>{{.Title}}</title>
+		{{end}}
 		{{- range $key, $value := .Fields}}
 		<field name="{{$key}}">{{$value}}</field>{{end}}{{range $key, $value := .Attachments}}
 		<attachment>
@@ -42,6 +45,7 @@ func init() {
 }
 
 type RecordRequest struct {
+	Title       string
 	Fields      map[string]string
 	Attachments []*RecordRequestAttachment
 }
